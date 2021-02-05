@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import Header from './components/header/Header.jsx';
 import Calendar from './components/calendar/Calendar.jsx';
 
@@ -6,47 +6,43 @@ import { getWeekStartDate, generateWeekRange } from '../src/utils/dateUtils.js';
 
 import './common.scss';
 
-class App extends Component {
-  state = {
-    weekStartDate: new Date(),
+const App = () => {
+  const [startDateWeek, setStartDateWeek] = useState(new Date());
+  const [isOpenModalWindow, setIsOpenModalWindow] = useState(false);
+
+  const handleNextWeek = () => {
+    setStartDateWeek(new Date(startDateWeek.setDate(startDateWeek.getDate() + 7)));
   };
 
-  handleTodayWeek = () => {
-    this.setState({
-      weekStartDate: new Date(),
-    });
+  const handlePrevWeek = () => {
+    setStartDateWeek(new Date(startDateWeek.setDate(startDateWeek.getDate() - 7)));
   };
 
-  handleNextWeek = () => {
-    const newDate = this.state.weekStartDate;
-    this.setState({
-      weekStartDate: new Date(newDate.setDate(newDate.getDate() + 7)),
-    });
+  const handleTodayWeek = () => {
+    setStartDateWeek(new Date());
   };
 
-  handlePrevWeek = () => {
-    const newDate = this.state.weekStartDate;
-    this.setState({
-      weekStartDate: new Date(newDate.setDate(newDate.getDate() - 7)),
-    });
+  const handleOpenModal = () => {
+    setIsOpenModalWindow(true);
   };
 
-  render() {
-    const { weekStartDate } = this.state;
-    const weekDates = generateWeekRange(getWeekStartDate(weekStartDate));
+  const handleCloseModal = () => {
+    setIsOpenModalWindow(false);
+  };
 
-    return (
-      <>
-        <Header
-          todayWeek={this.handleTodayWeek}
-          prevWeek={this.handlePrevWeek}
-          nextWeek={this.handleNextWeek}
-          weekDates={weekDates}
-        />
-        <Calendar weekDates={weekDates} />
-      </>
-    );
-  }
-}
+  const weekDates = generateWeekRange(getWeekStartDate(startDateWeek));
 
+  return (
+    <>
+      <Header
+        nextWeek={handleNextWeek}
+        prevWeek={handlePrevWeek}
+        todayWeek={handleTodayWeek}
+        weekDates={weekDates}
+        openModal={handleOpenModal}
+      />
+      <Calendar weekDates={weekDates} openModal={isOpenModalWindow} closeModal={handleCloseModal} />
+    </>
+  );
+};
 export default App;

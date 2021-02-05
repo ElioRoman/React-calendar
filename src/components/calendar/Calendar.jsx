@@ -1,32 +1,56 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Navigation from './../navigation/Navigation';
 import Week from '../week/Week';
 import Sidebar from '../sidebar/Sidebar';
-import events from '../../gateway/events';
-
+import { fetchEvents, updateEvent, deleteEvent } from '../../gateway/events';
+import Modal from '../modal/Modal';
 import './calendar.scss';
 
-class Calendar extends Component {
-  state = {
-    events,
+const Calendar = ({ weekDates, openModal, closeModal }) => {
+  const [events, setEvents] = useState([]);
+
+  const serverRequest = () => {
+    fetchEvents()
+      .then(events => setEvents(events))
+      .catch(error => alert(error.message));
   };
 
-  render() {
-    const { weekDates } = this.props;
+  useEffect(() => {
+    serverRequest();
+  }, []);
 
-    return (
-      <section className="calendar">
-        <Navigation weekDates={weekDates} />
-        <div className="calendar__body">
-          <div className="calendar__week-container">
-            <Sidebar />
-            <Week weekDates={weekDates} events={this.state.events} />
-          </div>
+  const changeStatusEvent = id => {
+    const { status, ...event } = events.find(item => item.id == id);
+
+    const updatedData = {
+      status: !status,
+      ...event,
+    };
+    updateEvent(id, updatedData).then(() => serverRequest());
+  };
+
+  const removeEvent = id => {
+    deleteEvent(id).then(() => serverRequest());
+  };
+
+  return (
+    <section className="calendar">
+      <Navigation weekDates={weekDates} />
+      <div className="calendar__body">
+        <div className="calendar__week-container">
+          <Sidebar />
+          <Week
+            weekDates={weekDates}
+            events={events}
+            changeStatusEvent={changeStatusEvent}
+            removeEvent={removeEvent}
+          />
         </div>
-      </section>
-    );
-  }
-}
+      </div>
+      {openModal && <Modal closeModal={closeModal} serverRequest={serverRequest} />}
+    </section>
+  );
+};
 
 export default Calendar;

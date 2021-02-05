@@ -1,32 +1,52 @@
-const events = [
-  {
-    id: 1,
-    title: 'Go to the gym',
-    description: 'some text here',
-    dateFrom: new Date(2021, 2, 1, 10, 15),
-    dateTo: new Date(2021, 2, 1, 15, 0),
-  },
-  {
-    id: 2,
-    title: 'Go to the school',
-    description: 'hello, 2 am',
-    dateFrom: new Date(2021, 2, 16, 10, 15),
-    dateTo: new Date(2021, 2, 16, 11, 0),
-  },
-  {
-    id: 3,
-    title: 'Lunch',
-    description: '',
-    dateFrom: new Date(2021, 2, 17, 10, 30),
-    dateTo: new Date(2021, 2, 17, 11, 30),
-  },
-  {
-    id: 4,
-    title: 'Meet friend',
-    description: 'at the cafe',
-    dateFrom: new Date(2021, 2, 25, 10, 30),
-    dateTo: new Date(2021, 2, 25, 11, 0),
-  },
-];
+const baseUrl = 'https://5fedddb29708250017ce3f18.mockapi.io/api/v1/calendar';
 
-export default events;
+export const createEvent = events =>
+  fetch(baseUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    body: JSON.stringify(events),
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error('Faild to create event');
+    }
+  });
+
+export const fetchEvents = () => {
+  return fetch(baseUrl)
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('Internal Server Error. Cannot display events');
+      }
+      return res.json();
+    })
+    .then(events =>
+      events.map(({ _id, dateFrom, dateTo, ...event }) => ({
+        id: _id,
+        dateFrom: new Date(dateFrom),
+        dateTo: new Date(dateTo),
+        ...event,
+      })),
+    );
+};
+
+export const updateEvent = (id, updatedData) => {
+  return fetch(`${baseUrl}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedData),
+  });
+};
+
+export const deleteEvent = id => {
+  return fetch(`${baseUrl}/${id}`, {
+    method: 'DELETE',
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error('Faild to delete task');
+    }
+  });
+};

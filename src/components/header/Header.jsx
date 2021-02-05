@@ -1,19 +1,16 @@
 import React from 'react';
-import moment from 'moment';
-
 import { months } from '../../utils/dateUtils.js';
-
 import './header.scss';
 
-const Header = ({ todayWeek, prevWeek, nextWeek, weekDates }) => {
-  const firstWeekday = moment(weekDates[0]).format('MMMM Y');
-  const lastWeekday = moment(weekDates[weekDates.length - 1]).format('MMMM Y');
-  const monthName =
-    firstWeekday === lastWeekday ? firstWeekday : `${firstWeekday} - ${lastWeekday}`;
+const Header = ({ nextWeek, prevWeek, todayWeek, weekDates, openModal }) => {
+  const firstDayWeek = months[weekDates[0].getMonth()];
+  const lastDayWeek = months[weekDates[0].getMonth()];
+  const textMonth =
+    firstDayWeek === lastDayWeek ? `${firstDayWeek}` : `${firstDayWeek} - ${lastDayWeek}`;
 
   return (
     <header className="header">
-      <button className="button create-event-btn">
+      <button className="button create-event-btn" onClick={openModal}>
         <i className="fas fa-plus create-event-btn__icon"></i>Create
       </button>
       <div className="navigation">
@@ -23,10 +20,10 @@ const Header = ({ todayWeek, prevWeek, nextWeek, weekDates }) => {
         <button className="icon-button navigation__nav-icon" onClick={prevWeek}>
           <i className="fas fa-chevron-left"></i>
         </button>
-        <button className="icon-button navigation__nav-icon" onClick={nextWeek}>
-          <i className="fas fa-chevron-right"></i>
+        <button className="icon-button navigation__nav-icon">
+          <i className="fas fa-chevron-right" onClick={nextWeek}></i>
         </button>
-        <span className="navigation__displayed-month">{monthName}</span>
+        <span className="navigation__displayed-month">{textMonth}</span>
       </div>
     </header>
   );
