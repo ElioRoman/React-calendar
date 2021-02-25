@@ -31,16 +31,6 @@ export const fetchEvents = () => {
     );
 };
 
-export const updateEvent = (id, updatedData) => {
-  return fetch(`${baseUrl}/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(updatedData),
-  });
-};
-
 export const deleteEvent = id => {
   return fetch(`${baseUrl}/${id}`, {
     method: 'DELETE',
