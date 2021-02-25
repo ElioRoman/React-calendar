@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Event from '../event/Event';
+import PropTypes from 'prop-types';
 import { formatMins } from '../../../src/utils/dateUtils.js';
 
-const Hour = ({ dataHour, hourEvents, changeStatusEvent, removeEvent, redLine }) => {
+const Hour = ({ dataHour, hourEvents, removeEvent, redLine }) => {
   const [minutes, setMinutes] = useState(new Date().getMinutes());
   const [hour, setHour] = useState(new Date().getHours());
 
@@ -40,7 +41,6 @@ const Hour = ({ dataHour, hourEvents, changeStatusEvent, removeEvent, redLine })
             title={title}
             removeEvent={removeEvent}
             status={status}
-            changeStatusEvent={changeStatusEvent}
           />
         );
       })}
@@ -48,4 +48,10 @@ const Hour = ({ dataHour, hourEvents, changeStatusEvent, removeEvent, redLine })
   );
 };
 
+Hour.propTypes = {
+  dataHour: PropTypes.number.isRequired,
+  hourEvents: PropTypes.array.isRequired,
+  removeEvent: PropTypes.func.isRequired,
+  redLine: PropTypes.bool,
+};
 export default Hour;
