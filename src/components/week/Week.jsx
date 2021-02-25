@@ -2,8 +2,9 @@ import React from 'react';
 import Day from '../day/Day';
 import moment from 'moment';
 import './week.scss';
+import PropTypes from 'prop-types';
 
-const Week = ({ weekDates, events, changeStatusEvent, removeEvent }) => {
+const Week = ({ weekDates, events, removeEvent }) => {
   return (
     <div className="calendar__week">
       {weekDates.map(dayStart => {
@@ -21,7 +22,6 @@ const Week = ({ weekDates, events, changeStatusEvent, removeEvent }) => {
             key={dayStart.getDate()}
             dataDay={dayStart.getDate()}
             dayEvents={dayEvents}
-            changeStatusEvent={changeStatusEvent}
             removeEvent={removeEvent}
             day={dayStart}
             redLine={redLine}
@@ -30,6 +30,12 @@ const Week = ({ weekDates, events, changeStatusEvent, removeEvent }) => {
       })}
     </div>
   );
+};
+
+Week.propTypes = {
+  weekDates: PropTypes.array.isRequired,
+  events: PropTypes.array.isRequired,
+  removeEvent: PropTypes.func.isRequired,
 };
 
 export default Week;
