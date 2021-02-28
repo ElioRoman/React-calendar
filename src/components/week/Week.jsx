@@ -1,6 +1,5 @@
 import React from 'react';
 import Day from '../day/Day';
-import moment from 'moment';
 import './week.scss';
 import PropTypes from 'prop-types';
 
@@ -14,17 +13,13 @@ const Week = ({ weekDates, events, removeEvent }) => {
           event => event.dateFrom > dayStart && event.dateTo < dayEnd,
         );
 
-        const redLine =
-          moment(dayStart).format('MMMM DD YYYY') == moment(new Date()).format('MMMM DD YYYY');
-
         return (
           <Day
-            key={dayStart.getDate()}
-            dataDay={dayStart.getDate()}
+            key={dayStart}
+            dataDay={dayStart}
             dayEvents={dayEvents}
             removeEvent={removeEvent}
             day={dayStart}
-            redLine={redLine}
           />
         );
       })}
