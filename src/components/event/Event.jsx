@@ -9,10 +9,6 @@ const Event = ({ height, marginTop, title, time, id, removeEvent }) => {
     marginTop,
   };
 
-  const buttonStyle = {
-    marginTop: height + marginTop,
-  };
-
   return (
     <>
       <div
@@ -24,7 +20,7 @@ const Event = ({ height, marginTop, title, time, id, removeEvent }) => {
         <div className="event__time">{time}</div>
       </div>
       {deleteBtnVisibility && (
-        <button style={buttonStyle} className="delete-event-btn" onClick={() => removeEvent(id)}>
+      <button style={{marginTop: height + marginTop}} className="delete-event-btn" onClick={() => removeEvent(id)}>
           <i className="fas fa-trash-alt"></i>
           <span>Delete</span>
         </button>
